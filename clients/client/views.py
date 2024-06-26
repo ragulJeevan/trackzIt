@@ -9,13 +9,24 @@ def client_list(request):
     if request.method == 'GET':
         clients = Client.objects.all()
         serializer = ClientSerializer(clients, many=True)
-        return Response(serializer.data)
-    
+        response = {
+                "status": True,
+                "status_code": status.HTTP_200_OK,
+                "status_message": "Message",
+                "data": serializer.data
+        }
+        return Response(response)
     elif request.method == 'POST':
         serializer = ClientSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            response = {
+                "status": True,
+                "status_code": status.HTTP_200_OK,
+                "status_message": "Message",
+                "data": serializer.data
+            }
+            return Response(response)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
